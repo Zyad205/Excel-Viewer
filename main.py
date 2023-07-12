@@ -45,7 +45,6 @@ class MainApp(ctk.CTk):
         self.excel.configure(yscrollcommand=self.v_scrollbar_command)
 
     def h_scrollbar_command(self, *scroll):
-        print(scroll[1])
         if float(scroll[1]) > 0.95:
             self.excel.increase_columns()
         self.h_scrollbar.set(*scroll)
@@ -96,7 +95,6 @@ class Excel(ttk.Treeview):
         self.row_num = row
 
     def increase_columns(self):
-        print(self["columns"])
         col = self.column_num + 1
         self["columns"] = (*self["columns"], (str(col)))
         for col in range(1, int(self["columns"][-1]) + 1):
