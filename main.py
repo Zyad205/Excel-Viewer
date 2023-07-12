@@ -25,9 +25,15 @@ class MainApp(ctk.CTk):
 
     def open_excel(self):
         path = ctk.filedialog.askopenfile(filetypes=[("Excel", "*.xlsx")])
+        
         if path is not None:
+            self.excel.clear()
             wb = load_workbook(path.name)
             ws = wb.worksheets[0]
+            while ws.max_column > self.excel.column_num:
+                self.excel.increase_columns()
+            while ws.max_row > self.excel.row_num:
+                self.excel.increase_columns()
             for row in range(1, ws.max_row + 1):
                 for column in range(1, ws.max_column + 1):
                     pos = f"{get_column_letter(column)}{row}"
@@ -37,6 +43,7 @@ class MainApp(ctk.CTk):
     def v_scrollbar_command(self, *scroll):
         if float(scroll[1]) > 0.95:
             self.excel.increase_rows()
+            
         self.v_scrollbar.set(*scroll)
 
     def make_v_scrollbar(self):
@@ -85,7 +92,6 @@ class Excel(ttk.Treeview):
             self.insert("", index="end", iid=col)
             self.set(col, 0, col)
 
-        self.bind("<MouseWheel>", lambda _: "break")
         self.place(x=0, y=0, relwidth=1, relheight=0.7)
 
     def increase_rows(self):
@@ -102,5 +108,13 @@ class Excel(ttk.Treeview):
             self.column(col, width=100, stretch=False)
             self.heading(col, text=get_column_letter(col))
         self.column_num = col
+    
+
+    def clear(self):
+        self.delete(*self.get_children())
+ 
+        for row in range(1, self.row_num + 1):
+            self.insert("", index="end", iid=row)
+            self.set(row, 0, row)
 
 MainApp()
