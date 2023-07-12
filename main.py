@@ -1,4 +1,3 @@
-from typing import Optional, Tuple, Union
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 import customtkinter as ctk
